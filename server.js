@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const {MongoClient} = require('mongodb');
-const crypto = require('ManagerCrypto');
+const crypto = require('./ManagerCrypto.js');
+const EmailManager = require('./EmailManager.js');
 
 const PORT = process.env.PORT || 2999;
 
@@ -10,12 +11,14 @@ const app = express();
 const client = new MongoClient("mongodb+srv://midnight:konnor2003@webgame.rtoj0kr.mongodb.net/?retryWrites=true&w=majority");
 
 let users;
+let checkEmail;
 
 const start = async () => {
     try {
         await client.connect();
         console.log("mongoDB connect");
         users = await client.db().collection('usersTest');
+        checkEmail = await client.db().collection("checkEmail");
     }
     catch (e) {
         console.log(e)
@@ -31,7 +34,6 @@ app.use(express.json());
 app.post('/checkemail',(req,res)=> {
     const func = async () => {
         const email = crypto.encrypt(req.body.email);
-        const password = crypto.encrypt(req.body.password);
         try
         {
             const doc = await users.findOne({email: email});
