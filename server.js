@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const {MongoClient} = require('mongodb');
+const crypto = require('ManagerCrypto');
 
 const PORT = process.env.PORT || 2999;
 
@@ -27,10 +28,43 @@ app.use(cors());
 
 app.use(express.json());
 
+app.post('/checkemail',(req,res)=> {
+    const func = async () => {
+        const email = crypto.encrypt(req.body.email);
+        const password = crypto.encrypt(req.body.password);
+        try
+        {
+            const doc = await users.findOne({email: email});
+            if (doc)
+            {
+                res.status(200).json({
+                    "response": false
+                })
+            }
+            else
+            {
+                await users.insertOne({email: email, password: password})
+                res.status(200).json({
+                    "response": true
+                })
+            }
+        }
+        catch (e)
+        {
+            console.log(e);
+            res.status(500).json({
+                "response": false
+            })
+        }
+    }
+
+    func();
+})
+
 app.post('/registration', (req,res) => {
     const func = async () => {
-        const email = req.body.email;
-        const password = req.body.password;
+        const email = crypto.encrypt(req.body.email);
+        const password = crypto.encrypt(req.body.password);
         try
         {
             const doc = await users.findOne({email: email});
@@ -62,8 +96,8 @@ app.post('/registration', (req,res) => {
 
 app.post('/authorization', (req, res) => {
     const func = async () => {
-        const email = req.body.email;
-        const password = req.body.password;
+        const email = crypto.encrypt(req.body.email);
+        const password = crypto.encrypt(req.body.password);
         try
         {
             const doc = await users.findOne({email: email});
