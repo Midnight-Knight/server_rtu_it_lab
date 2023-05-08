@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-fs.readFile('file.json', 'utf-8', (err, data) => {
+fs.readFile('my_json/family.json', 'utf-8', (err, data) => {
     if (err) {
         console.error(err);
         return;
@@ -10,7 +10,7 @@ fs.readFile('file.json', 'utf-8', (err, data) => {
     const json = JSON.parse(data);
 
     // проходим по всем записям массива и изменяем нужный атрибут
-    json.records.forEach((record) => {
+    json.map((record) => {
         NewDate = record.Date;
         const StartDay = NewDate[0] == "0" ? Number.parseInt(NewDate[1]) : Number.parseInt((NewDate[0]+NewDate[1]));
         const StartMonth = NewDate[3] == "0" ? Number.parseInt(NewDate[4]) : Number.parseInt((NewDate[3]+NewDate[4]));
@@ -37,7 +37,7 @@ fs.readFile('file.json', 'utf-8', (err, data) => {
     });
 
     // записываем изменения обратно в JSON-файл
-    fs.writeFile('file.json', JSON.stringify(json), (err) => {
+    fs.writeFile('my_json/family.json', JSON.stringify(json, null, 2), (err) => {
         if (err) {
             console.error(err);
             return;
