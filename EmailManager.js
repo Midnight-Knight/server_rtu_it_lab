@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
-module.exports = function sendMail(toEmail, subject, text) {
+function sendMail(toEmail, subject, text) {
     const mailOptions = {
         from: 'ActualMoscowEvents@yandex.ru',
         to: toEmail,
@@ -25,4 +25,8 @@ module.exports = function sendMail(toEmail, subject, text) {
             console.log(error);
         }
     });
+}
+
+module.exports = {
+    sendMail: sendMail
 }
