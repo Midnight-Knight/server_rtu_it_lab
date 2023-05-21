@@ -4,10 +4,12 @@ const {MongoClient} = require('mongodb');
 const crypto = require('./ManagerCrypto.js');
 const emailManager = require('./EmailManager.js');
 const fs = require('fs');
+const path = require('path');
 
 const PORT = process.env.PORT || 2999;
 
 const app = express();
+app.use(express.static(path.join(__dirname, 'my_image')));
 
 const client = new MongoClient("mongodb+srv://midnight:konnor2003@webgame.rtoj0kr.mongodb.net/?retryWrites=true&w=majority");
 
@@ -62,6 +64,7 @@ const parseJsonFile = (filePath) => {
                 data[i].coordinates[0] < data[i].coordinates[1] ? data[i].coordinates[1] : data[i].coordinates[0],
                 data[i].coordinates[0] < data[i].coordinates[1] ? data[i].coordinates[0] : data[i].coordinates[1]
             ],
+            "image": "http://localhost:2999/"+data[i].ID+".png",
             "stream": date < StartDate
                 ? false
                 : date >= StartDate && date <= EndDate
@@ -248,7 +251,7 @@ app.post('/message', (req,res) => {
         const email = req.body.email;
         const title = req.body.title;
         const message = req.body.message;
-        if (checkEmail(email))
+        if (FuncCheckEmail(email) === true)
         {
             try
             {
