@@ -37,7 +37,7 @@ const ServerError = (e, res) => {
 const parseJsonFile = (filePath) => {
     const rawData = fs.readFileSync(filePath);
     const data = JSON.parse(rawData);
-    const date = new Date();
+    const date = 1; // new Date();
     let array = [];
     for (let i = 0; i < data.length; ++i)
     {
