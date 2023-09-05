@@ -113,7 +113,7 @@ app.use(express.json());
 
 app.get('/api/get/festivals', (req, res) => {
     const func = async () => {
-        res.json(JsonFestivals)
+        res.json({}) //JsonFestivals
     }
 
     func();
